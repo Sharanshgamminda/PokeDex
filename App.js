@@ -7,8 +7,9 @@
 
 import React, { useEffect, useState } from 'react';
 import {
+  Image,
   SafeAreaView,
-  ScrollView,
+  FlatList,
   StatusBar,
   StyleSheet,
   Text,
@@ -42,22 +43,52 @@ export default function App() {
     fetchFirstGenPokemons();
   }, []);
 
+  const renderPokemon = ({ item }) => {
+    return (
+      <View style={styles.pokemonContainer}>
+        <Text style={styles.pokemonTitle}>
+          {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
+        </Text>
+        <Image
+          style={styles.pokemonSprite}
+          source={{
+            uri: item.sprites.front_default,
+          }}
+        />
+      </View>
+    );
+  };
 
   
-  
-  return (<ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
-    {firstGenPokemonDetails.map((p) => (
-      <View key={p.id}>
-        <Text>{p.name}</Text>
-      </View>
-    ))}
-     </ScrollView>
-    );
-}   
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>First Gen Pokemons</Text>
+      <FlatList data={firstGenPokemonDetails} renderItem={renderPokemon} />
+      <StatusBar style="auto" />
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  }});
+    backgroundColor: "#fff",
+    marginTop: 60,
+  },
+  title: {
+    fontSize: 38,
+    alignSelf: "center",
+    marginBottom: 20,
+  },
+  pokemonContainer: { backgroundColor: "lightgrey", marginTop: 10 },
+  pokemonTitle: {
+    fontSize: 32,
+    alignSelf: "center",
+    marginTop: 10,
+  },
+  pokemonSprite: {
+    width: 200,
+    height: 200,
+    alignSelf: "center",
+  },
+});
